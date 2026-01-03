@@ -3,12 +3,30 @@ import whisper
 import tempfile
 import os
 import datetime
+from transformers import pipeline
 
 app = FastAPI()
 
-# Load Whisper model ONCE at startup
+# ===============================
+# Load models ONCE at startup
+# ===============================
+
+# Whisper model
 model = whisper.load_model("base")
 print("✅ Whisper model loaded")
+
+# Hate speech classifier
+hate_classifier = pipeline(
+    "text-classification",
+    model="unitary/toxic-bert",
+    top_k=None
+)
+print("✅ Hate speech model loaded")
+
+
+# ===============================
+# WebSocket: Audio streaming
+# ===============================
 
 @app.websocket("/ws/audio")
 async def audio_stream(ws: WebSocket):
@@ -39,5 +57,27 @@ async def audio_stream(ws: WebSocket):
             if text:
                 print("🗣️ Transcription:", text)
 
+                # hate speech detection
+                hate_result = hate_classifier(text)
+
+                print("🚨 Hate detection:", hate_result)
+
+
     except Exception as e:
         print("❌ WebSocket closed:", e)
+
+
+# ===============================
+# TEST ENDPOINT: Hate detection
+# ===============================
+
+@app.get("/test-hate")
+def test_hate():
+    text = "I hate you and your stupid ideas"
+
+    result = hate_classifier(text)
+
+    return {
+        "input_text": text,
+        "model_output": result
+    }
