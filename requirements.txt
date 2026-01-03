@@ -1,7 +1,6 @@
 fastapi
 uvicorn
 python-multipart
-fastapi
-uvicorn
-python-multipart
 websockets
+openai-whisper
+torch
