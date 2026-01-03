@@ -10,12 +10,9 @@ async def send_audio():
         with open("test.wav", "rb") as f:
             audio = f.read()
 
-        chunk_size = 16000 * 4  # simulate ~4 sec chunks
+        await ws.send(audio)
+        print("Sent full audio file")
 
-        for i in range(0, len(audio), chunk_size):
-            chunk = audio[i:i+chunk_size]
-            await ws.send(chunk)
-            print("Sent chunk")
-            await asyncio.sleep(4)
+        await asyncio.sleep(1)
 
 asyncio.run(send_audio())
