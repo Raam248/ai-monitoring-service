@@ -1,6 +1,22 @@
-fastapi
-uvicorn
-python-multipart
-websockets
-openai-whisper
-torch
+# Core API
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+python-multipart>=0.0.6
+websockets>=11.0
+
+# Speech Recognition
+openai-whisper>=20231117
+
+# ML Frameworks
+torch>=2.0.0
+transformers>=4.30.0
+tf-keras>=2.15.0
+
+# Emotion Detection (optional - set ENABLE_VIDEO=false to skip)
+fer>=22.5.0
+tensorflow>=2.15.0
+opencv-python>=4.8.0
+
+# Utilities
+numpy>=1.24.0
+Pillow>=10.0.0
